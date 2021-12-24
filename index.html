@@ -120,7 +120,7 @@ for (const dayIndex of [...Array(365).keys()]) {
     elem.onclick = () => {
       console.log(tag)
       if ((selected[tag] = !selected[tag])) {
-        if (Object.entries(selected).filter(e => e[1]).length >= 12) {
+        if (Object.entries(selected).filter(e => e[1]).length >= 14) {
           selected[tag] = false
           return
         }
@@ -132,7 +132,7 @@ for (const dayIndex of [...Array(365).keys()]) {
       }
       console.log(Object.entries(selected).filter(e => e[1]).map(e => e[0]))
       const selection = Object.entries(selected).filter(e => e[1]).map(e => e[0]).join('&')
-      history.replaceState('', null, `?s=${selection}`)
+      history.replaceState('', null, `?${selection}`)
     }
   )
   currentWeek.append(elem)
