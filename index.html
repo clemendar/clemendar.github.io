@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Plan</title>
+</head>
+<body>
+  <div id="cal">
+    <div class='week week-0'></div>
+  </div>
+<style type="text/css">
+* {
+  font-family: monospace;
+  box-sizing: border-box;
+}
+#cal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 3vw;
+  padding-bottom: 3vw;
+}
+
+.holy {
+  font-size: 1.6vw;
+  text-align: center;
+}
+
+.week {
+  display: flex;
+  height: 13vw;
+  width: 91vw;
+}
+.day {
+  display: flex;
+  width: 13vw;
+  justify-content: center;
+  align-items: center;
+  font-size: 3vw;
+  border: 1px solid white;
+  flex-direction: column;
+}
+</style>
+<script type="module">
+
+// Setup
+const DAY = 1000*60*60*24
+const FIRST = new Date('01/01/2022')
+
+const holidays = {
+  '1/1': "New Year's Day",
+  '15/4': "Good Friday",
+  '17/4': "Easter Sunday",
+  '25/4': "Freedom Day",
+  '01/5': "Labour Day",
+  '10/6': "Portugal Day",
+  '16/6': "Corpus Christi",
+  '15/8': "Assumption of Mary",
+  '5/10': "Republic Day in Portugal",
+  '1/11': "All Saints' Day",
+  '1/12': "Portugal Independence Day",
+  '8/12': "Feast of the Immaculate Conception",
+  '25/12': "Christmas Day",
+}
+
+let [currentWeek] = document.getElementsByClassName('week')
+// Start a Saturday
+let week = 0
+for (const dayIndex of [...Array(365).keys()]) {
+  const day = new Date(FIRST.getTime() + dayIndex * DAY)
+  const m = day.getMonth()
+  const hue = (m * 30 + ( m % 2 ? 180 : 0)) % 360
+  const elem = document.createElement('div')
+  if (day.getDay() === 1) {
+    const weekElem = document.createElement('div')
+    weekElem.classList.add('week', `week-${++week}`)
+    currentWeek = weekElem
+    document.getElementById('cal').append(weekElem)
+  }
+  elem.classList.add('day', `day-${day.getDay()}`)
+  elem.textContent = day.getDate()
+  const holy = holidays[`${day.getDate()}/${day.getMonth()+1}`]
+  elem.style.backgroundColor = `hsl(${hue},100%,96%)`
+  if (holy) {
+    elem.style.backgroundColor = `hsl(${hue},100%,85%)`
+    elem.style.borderColor = `hsl(${hue},100%,96%)`
+    const desc = document.createElement('div')
+    desc.classList.add('holy')
+    desc.textContent = holy
+    elem.append(desc)
+  } else if ((dayIndex +3)% 6 > 3) {
+    elem.style.backgroundColor = `hsl(${hue},100%,85%)`
+    elem.style.borderColor = `hsl(${hue},100%,96%)`
+  }
+  elem.style.color = `hsl(${hue},100%,30%)`
+  currentWeek.append(elem)
+}
+
+
+// Updates
+const update = () => {
+
+
+}
+
+// update tick every seconds
+setInterval(() => requestAnimationFrame(update), 60000)
+
+</script>
+</body>
+</html>
