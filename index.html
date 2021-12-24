@@ -22,9 +22,10 @@
   padding-bottom: 3vw;
 }
 
-.holy {
-  font-size: 1.6vw;
+.desc {
+  font-size: 2vw;
   text-align: center;
+  white-space: pre-wrap;
 }
 
 .week {
@@ -32,6 +33,7 @@
   height: 13vw;
   width: 91vw;
 }
+
 .day {
   display: flex;
   width: 13vw;
@@ -40,28 +42,43 @@
   font-size: 3vw;
   border: 1px solid white;
   flex-direction: column;
+  user-select: none;
 }
 </style>
 <script type="module">
 
 // Setup
 const DAY = 1000*60*60*24
+const CAL = document.getElementById('cal')
 const FIRST = new Date('01/01/2022')
 
+const selected = Object.fromEntries(
+  [...new URLSearchParams(location.search).keys()]
+    .map(s => [s, true])
+)
+
+console.log(selected)
+
 const holidays = {
-  '1/1': "New Year's Day",
-  '15/4': "Good Friday",
-  '17/4': "Easter Sunday",
-  '25/4': "Freedom Day",
-  '01/5': "Labour Day",
-  '10/6': "Portugal Day",
-  '16/6': "Corpus Christi",
-  '15/8': "Assumption of Mary",
-  '5/10': "Republic Day in Portugal",
-  '1/11': "All Saints' Day",
-  '1/12': "Portugal Independence Day",
-  '8/12': "Feast of the Immaculate Conception",
-  '25/12': "Christmas Day",
+  '1_1': "New Year's Day",
+  '15_4': "Good Friday",
+  '17_4': "Easter Sunday",
+  '25_4': "Freedom Day",
+  '01_5': "Labour Day",
+  '10_6': "Portugal Day",
+  '16_6': "Corpus Christi",
+  '15_8': "Assumption of Mary",
+  '5_10': "Republic Day in Portugal",
+  '1_11': "All Saints' Day",
+  '1_12': "Portugal Independence Day",
+  '8_12': "Feast of the Immaculate Conception",
+  '25_12': "Christmas Day",
+}
+
+const specials = {
+  '21_1': '🛬\nback to lisboa',
+  '5_3': '🎂\nClement',
+  '3_11': '🎂\nAline',
 }
 
 let [currentWeek] = document.getElementsByClassName('week')
@@ -71,29 +88,53 @@ for (const dayIndex of [...Array(365).keys()]) {
   const day = new Date(FIRST.getTime() + dayIndex * DAY)
   const m = day.getMonth()
   const hue = (m * 30 + ( m % 2 ? 180 : 0)) % 360
+  const tag = `${day.getDate()}_${day.getMonth()+1}`
   const elem = document.createElement('div')
   if (day.getDay() === 1) {
     const weekElem = document.createElement('div')
     weekElem.classList.add('week', `week-${++week}`)
     currentWeek = weekElem
-    document.getElementById('cal').append(weekElem)
+    CAL.append(weekElem)
   }
-  elem.classList.add('day', `day-${day.getDay()}`)
-  elem.textContent = day.getDate()
-  const holy = holidays[`${day.getDate()}/${day.getMonth()+1}`]
-  elem.style.backgroundColor = `hsl(${hue},100%,96%)`
-  if (holy) {
-    elem.style.backgroundColor = `hsl(${hue},100%,85%)`
-    elem.style.borderColor = `hsl(${hue},100%,96%)`
+  elem.classList.add('day', `day-${day.getDay()}`, tag)
+  const offDay = holidays[tag] || (dayIndex +3)% 6 > 3
+  const description = specials[tag] || holidays[tag]
+  if (description) {
     const desc = document.createElement('div')
-    desc.classList.add('holy')
-    desc.textContent = holy
+    desc.classList.add('desc')
+    desc.textContent = description
     elem.append(desc)
-  } else if ((dayIndex +3)% 6 > 3) {
+  } else {
+    elem.textContent = day.getDate()
+  }
+
+  if (offDay || selected[tag]) {
     elem.style.backgroundColor = `hsl(${hue},100%,85%)`
     elem.style.borderColor = `hsl(${hue},100%,96%)`
+  } else {
+    elem.style.backgroundColor = `hsl(${hue},100%,96%)`
   }
   elem.style.color = `hsl(${hue},100%,30%)`
+
+  offDay || (
+    elem.onclick = () => {
+      console.log(tag)
+      if ((selected[tag] = !selected[tag])) {
+        if (Object.entries(selected).filter(e => e[1]).length >= 12) {
+          selected[tag] = false
+          return
+        }
+        elem.style.backgroundColor = `hsl(${hue},100%,85%)`
+        elem.style.border = `1vw solid hsl(${hue},100%,96%)`
+      } else {
+        elem.style.backgroundColor = `hsl(${hue},100%,96%)`
+        elem.style.border = ''
+      }
+      console.log(Object.entries(selected).filter(e => e[1]).map(e => e[0]))
+      const selection = Object.entries(selected).filter(e => e[1]).map(e => e[0]).join('&')
+      history.replaceState('', null, `?s=${selection}`)
+    }
+  )
   currentWeek.append(elem)
 }
 
