@@ -108,9 +108,12 @@ for (const dayIndex of [...Array(365).keys()]) {
     elem.textContent = day.getDate()
   }
 
-  if (offDay || selected[tag]) {
+  if (offDay) {
     elem.style.backgroundColor = `hsl(${hue},100%,85%)`
     elem.style.borderColor = `hsl(${hue},100%,96%)`
+  } else if (selected[tag]) {
+    elem.style.backgroundColor = `hsl(${hue},100%,85%)`
+    elem.style.border = `1vw solid hsl(${hue},100%,40%)`
   } else {
     elem.style.backgroundColor = `hsl(${hue},100%,96%)`
   }
@@ -125,7 +128,7 @@ for (const dayIndex of [...Array(365).keys()]) {
           return
         }
         elem.style.backgroundColor = `hsl(${hue},100%,85%)`
-        elem.style.border = `1vw solid hsl(${hue},100%,96%)`
+        elem.style.border = `1vw solid hsl(${hue},100%,40%)`
       } else {
         elem.style.backgroundColor = `hsl(${hue},100%,96%)`
         elem.style.border = ''
