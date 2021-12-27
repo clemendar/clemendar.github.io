@@ -7,58 +7,125 @@
   <title>The Plan</title>
 </head>
 <body>
-  <div id="cal">
-    <div class='week week-0'></div>
+  <div id="countdown">
+    <div id="days">0</div>
+    <div id="time"><b id="hh">00</b><span id="mm">00</span></div>
   </div>
+  <div id="cal"></div>
 <style type="text/css">
+
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url(data:font/woff2;base64,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) format('woff2');
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(data:font/woff2;base64,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) format('woff2');
+}
+
+:root {
+  --1: calc(min(1vw, 9px));
+  --1-5: calc(var(--1) * -1.5);
+  --2: calc(var(--1) * 2);
+  --3: calc(var(--1) * 3);
+  --4: calc(var(--1) * 4);
+  --5: calc(var(--1) * 5);
+  --6: calc(var(--1) * 6);
+  --8: calc(var(--1) * 8);
+  --94: calc(var(--1) * 94);
+  --week-len: 7;
+}
+
 * {
-  font-family: monospace;
+  font-family: 'Roboto Mono', sans-serif;
+  font-weight: 200;
   box-sizing: border-box;
 }
+
+#countdown {
+  padding-top: var(--3);
+  padding-bottom: var(--3);
+  user-select: none;
+}
+
+
+#time, #days {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+#days {
+  font-size: var(--8);
+  margin-bottom: var(--1-5);
+}
+
+#time { font-size: var(--4) }
+
+#hh { font-weight: 700 }
+
 #cal {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding-top: 3vw;
-  padding-bottom: 3vw;
+  padding-top: var(--3);
+  padding-bottom: var(--3);
 }
 
 .desc {
-  font-size: 2vw;
+  font-size: var(--2);
   text-align: center;
   white-space: pre-wrap;
 }
 
 .week {
   display: flex;
-  height: 13vw;
-  width: 91vw;
+  height: calc(var(--94) / var(--week-len));
+  width: calc(var(--94));
+}
+.week:first-child {
+  justify-content: end;
 }
 
 .day {
   display: flex;
-  width: 13vw;
+  width: calc(var(--94) / var(--week-len));
   justify-content: center;
   align-items: center;
-  font-size: 3vw;
+  font-size: var(--3);
   border: 1px solid white;
   flex-direction: column;
   user-select: none;
+  outline: 2px solid white;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
 <script type="module">
 
 // Setup
-const DAY = 1000*60*60*24
+const S = 1000
+const M = S*60
+const H = M*60
+const DAY = H*24
+const CD = document.getElementById('countdown')
+const HH = document.getElementById('hh')
+const MM = document.getElementById('mm')
 const CAL = document.getElementById('cal')
+const DAYS = document.getElementById('days')
 const FIRST = new Date('01/01/2022')
 
 const selected = Object.fromEntries(
   [...new URLSearchParams(location.search).keys()]
     .map(s => [s, true])
 )
-
-console.log(selected)
 
 const holidays = {
   '1_1': "New Year's Day",
@@ -82,75 +149,102 @@ const specials = {
   '3_11': '🎂\nAline',
 }
 
-let [currentWeek] = document.getElementsByClassName('week')
-// Start a Saturday
-let week = 0
-for (const dayIndex of [...Array(365).keys()]) {
-  const day = new Date(FIRST.getTime() + dayIndex * DAY)
-  const m = day.getMonth()
-  const hue = (m * 30 + ( m % 2 ? 180 : 0)) % 360
-  const tag = `${day.getDate()}_${day.getMonth()+1}`
-  const elem = document.createElement('div')
-  if (day.getDay() === 1) {
-    const weekElem = document.createElement('div')
-    weekElem.classList.add('week', `week-${++week}`)
-    currentWeek = weekElem
-    CAL.append(weekElem)
-  }
-  elem.classList.add('day', `day-${day.getDay()}`, tag)
-  const offDay = holidays[tag] || (dayIndex +3)% 6 > 3
-  const description = specials[tag] || holidays[tag]
-  if (description) {
-    const desc = document.createElement('div')
-    desc.classList.add('desc')
-    desc.textContent = description
-    elem.append(desc)
-  } else {
-    elem.textContent = day.getDate()
-  }
-
-  if (offDay) {
-    elem.style.backgroundColor = `hsl(${hue},100%,85%)`
-    elem.style.borderColor = `hsl(${hue},100%,96%)`
-  } else if (selected[tag]) {
-    elem.style.backgroundColor = `hsl(${hue},100%,85%)`
-    elem.style.border = `1vw solid hsl(${hue},100%,40%)`
-  } else {
-    elem.style.backgroundColor = `hsl(${hue},100%,96%)`
-  }
-  elem.style.color = `hsl(${hue},100%,30%)`
-
-  offDay || (
-    elem.onclick = () => {
-      console.log(tag)
-      if ((selected[tag] = !selected[tag])) {
-        if (Object.entries(selected).filter(e => e[1]).length >= 14) {
-          selected[tag] = false
-          return
-        }
-        elem.style.backgroundColor = `hsl(${hue},100%,85%)`
-        elem.style.border = `1vw solid hsl(${hue},100%,40%)`
-      } else {
-        elem.style.backgroundColor = `hsl(${hue},100%,96%)`
-        elem.style.border = ''
-      }
-      console.log(Object.entries(selected).filter(e => e[1]).map(e => e[0]))
-      const selection = Object.entries(selected).filter(e => e[1]).map(e => e[0]).join('&')
-      history.replaceState('', null, `?${selection}`)
-    }
-  )
-  currentWeek.append(elem)
+const updateUrl = () => {
+  const selection = Object.entries(selected).filter(e => e[1]).map(e => e[0]).join('&')
+  history.replaceState('', null, `?${selection}`)
 }
 
+// Start a Saturday
+const generateDays = () => {
+  const by6 = selected[6]
+  document.documentElement.style.setProperty('--week-len', by6 ? '6' : '7')
+  CAL.innerHTML = `<div class='week week-0'></div>`
+  let week = 0
+  let [currentWeek] = document.getElementsByClassName('week')
+  for (const dayIndex of [...Array(365).keys()]) {
+    const day = new Date(FIRST.getTime() + dayIndex * DAY)
+    const m = day.getMonth()
+    const hue = (m * 30 + ( m % 2 ? 180 : 0)) % 360
+    const tag = `${day.getDate()}_${day.getMonth()+1}`
+    const elem = document.createElement('div')
+    if (by6 ? (dayIndex + 3) % 6 === 0 : day.getDay() === 1) {
+      const weekElem = document.createElement('div')
+      weekElem.classList.add('week', `week-${++week}`)
+      currentWeek = weekElem
+      CAL.append(weekElem)
+    }
+    elem.id = `_${tag}`
+    elem.classList.add('day', `day-${day.getDay()}`)
+    const offDay = holidays[tag] || (dayIndex +3)% 6 > 3
+    const description = specials[tag] || holidays[tag]
+    if (description) {
+      const desc = document.createElement('div')
+      desc.classList.add('desc')
+      desc.textContent = description
+      elem.append(desc)
+    } else {
+      elem.textContent = day.getDate()
+    }
+
+    if (offDay) {
+      elem.style.backgroundColor = `hsl(${hue},100%,85%)`
+      elem.style.borderColor = `hsl(${hue},100%,96%)`
+    } else if (selected[tag]) {
+      elem.style.backgroundColor = `hsl(${hue},100%,85%)`
+      elem.style.fontWeight = 700
+    } else {
+      elem.style.backgroundColor = `hsl(${hue},100%,96%)`
+    }
+
+    elem.style.color = `hsl(${hue},100%,30%)`
+    offDay || (
+      elem.onclick = () => {
+        if ((selected[tag] = !selected[tag])) {
+          if (Object.entries(selected).filter(e => e[1]).length >= 14) {
+            selected[tag] = false
+            return
+          }
+          elem.style.backgroundColor = `hsl(${hue},100%,85%)`
+          elem.style.border = `var(--1) solid hsl(${hue},100%,40%)`
+        } else {
+          elem.style.backgroundColor = `hsl(${hue},100%,96%)`
+          elem.style.border = ''
+        }
+        updateUrl()
+      }
+    )
+    currentWeek.append(elem)
+  }
+}
+
+CD.onclick = () => {
+  selected[6] = !selected[6]
+  updateUrl()
+  generateDays()
+}
 
 // Updates
+const fmt = (n, v, x) => String((~~(n / v)) % x).padStart(2, '0')
 const update = () => {
-
-
+  const now = Date.now()
+  const next = Object.entries(specials)
+    .map(([k, v]) => {
+      const d = new Date(`${k.split('_').reverse().join('/')}/2022`)
+      return [d.getTime() - now, v]
+    })
+    .find(([d]) => d > 0)
+  if (!next) return CD.remove()
+  const [diff, message] = next
+  DAYS.textContent = fmt(diff, DAY, 365)
+  HH.textContent = fmt(diff, H, 24)
+  MM.textContent = fmt(diff, M, 60)
 }
 
 // update tick every seconds
-setInterval(() => requestAnimationFrame(update), 60000)
+setInterval(() => requestAnimationFrame(update), M)
+generateDays()
+updateUrl()
+update()
 
 </script>
 </body>
