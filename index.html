@@ -75,6 +75,12 @@
   padding-bottom: var(--3);
 }
 
+div.day.today {
+  background-color: black!important;
+  color: white!important;
+  font-weight: 700;
+}
+
 .desc {
   font-size: var(--2);
   text-align: center;
@@ -97,13 +103,14 @@
   font-size: calc(var(--1) * 1.8);
 }
 
-.day-0:after { content: 'SUN' }
+.day-0, .day-6 { font-weight: 700; }
+.day-0:after { content: 'SUN'; font-weight: 700; }
 .day-1:after { content: 'MON' }
 .day-2:after { content: 'TUE' }
 .day-3:after { content: 'WED' }
 .day-4:after { content: 'THU' }
 .day-5:after { content: 'FRI' }
-.day-6:after { content: 'SAT' }
+.day-6:after { content: 'SAT'; font-weight: 700; }
 .day {
   display: flex;
   width: calc(var(--94) / var(--week-len));
@@ -154,8 +161,9 @@ const holidays = {
   '25_12': "Christmas Day",
 }
 
+const exactTimes = { '18_1': 1642489200000 }
 const specials = {
-  '21_1': '🛬\nback to lisboa',
+  '18_1': '🛬\nback to lisboa',
   '5_3': '🎂\nClement',
   '3_11': '🎂\nAline',
 }
@@ -166,7 +174,9 @@ const updateUrl = () => {
 }
 
 // Start a Saturday
+const dayElems = []
 const generateDays = () => {
+  dayElems.length = 0
   const by6 = selected[6]
   document.documentElement.style.setProperty('--week-len', by6 ? '6' : '7')
   CAL.innerHTML = `<div class='week week-0'></div>`
@@ -225,6 +235,7 @@ const generateDays = () => {
         updateUrl()
       }
     )
+    dayElems.push(elem)
     currentWeek.append(elem)
   }
 }
@@ -242,7 +253,8 @@ const update = () => {
   const next = Object.entries(specials)
     .map(([k, v]) => {
       const d = `${k.split('_').reverse().join('/')}/2022`
-      return [new Date(d).getTime() - now, v]
+      const t = exactTimes[k] || new Date(d).getTime()
+      return [t - now, v]
     })
     .find(([d]) => d > 0)
   if (!next) return CD.remove()
@@ -250,6 +262,10 @@ const update = () => {
   DAYS.textContent = fmt(diff, DAY, 365)
   HH.textContent = fmt(diff, H, 24)
   MM.textContent = fmt(diff, M, 60)
+  const currentDay = Math.floor((now - FIRST.getTime()) / DAY)
+  // TODO: hide passed weeks? or month ?
+  dayElems[currentDay - 1]?.classList.remove('today')
+  dayElems[currentDay]?.classList.add('today')
 }
 
 // update tick every seconds
